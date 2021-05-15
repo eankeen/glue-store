@@ -1,27 +1,13 @@
 # shellcheck shell=sh
 
-# note 1
-# the variables GLUE_ACTIONS_DIR
-# GLUE_COMMANDS_DIR, and GLUE_CONFIG_DIR,
-# will all be incorrect when sourcing this file. I don't
-# change them because I don't use them on the first pass
-# of any of the bootstrap files
+# The following is eval'ed as 'eval "$GLUE_ACTIONS_BOOTSTRAP"'
+# in 'actions/{,auto/}*'
 
-# shellcheck disable=SC2016
-printf "%s" '
-if [[ $GLUE_IS_AUTO == yes ]]; then
-	if [ -f "$GLUE_ACTIONS_DIR"/../util/bootstrap.sh ]; then
-		source "$GLUE_ACTIONS_DIR"/../util/bootstrap.sh
-	else
-		# see note 1
-		[[ -f $GLUE_ACTIONS_DIR/util/bootstrap.sh ]] && source "$GLUE_ACTIONS_DIR/util/bootstrap.sh"
-	fi
+if [ -f "$GLUE_WD/.glue/actions/auto/util/bootstrap.sh" ]; then
+	. "$GLUE_WD/.glue/actions/auto/util/bootstrap.sh"
+elif [ -f "$GLUE_WD/.glue/actions/util/bootstrap.sh" ]; then
+	. "$GLUE_WD/.glue/actions/util/bootstrap.sh"
 else
-	if [[ -f $GLUE_ACTIONS_DIR/util/bootstrap.sh ]]; then
-		source "$GLUE_ACTIONS_DIR/util/bootstrap.sh"
-	else
-		# see note 1
-		[[ -f $GLUE_ACTIONS_DIR/auto/util/bootstrap.sh ]] && source "$GLUE_ACTIONS_DIR/auto/util/bootstrap.sh"
-	fi
+	echo "Error: No bootstrap file found. This is an error with the glue store. Exiting"
+	exit 1
 fi
-'

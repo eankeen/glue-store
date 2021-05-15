@@ -1,5 +1,12 @@
 # shellcheck shell=bash
 
+bootstrap_init() {
+	trap sigint INT
+	sigint() {
+		die 'Received SIGINT'
+	}
+}
+
 bootstrap() {
 	shopt -q nullglob
 	local shoptExitStatus="$?"
@@ -8,29 +15,13 @@ bootstrap() {
 	# paths of all the files to source
 	local -a filesToSource=()
 
-	local utilDirAuto
-	if [[ $GLUE_IS_AUTO = yes ]]; then
-		utilDirAuto="$GLUE_ACTIONS_DIR/util"
-	else
-		utilDirAuto="$GLUE_ACTIONS_DIR/auto/util"
-	fi
-
-	local utilDirOverride
-	if [[ $GLUE_IS_AUTO = yes ]]; then
-		utilDirOverride="$GLUE_ACTIONS_DIR/../util"
-	else
-		utilDirOverride="$GLUE_ACTIONS_DIR/util"
-	fi
-
 	# Add file in 'util' to filesToSource, ensuring priority of 'override' scripts
-
 	local file possibleFileBasename
-	for file in "$utilDirOverride"/*?.sh; do
-		echo "added: $file"
+	for file in "$GLUE_WD/.glue/actions/util"/*?.sh; do
 		filesToSource+=("$file")
 	done
 
-	for possibleFile in "$utilDirAuto"/*?.sh; do
+	for possibleFile in "$GLUE_WD/.glue/actions/auto/util"/*?.sh; do
 		possibleFileBasename="${possibleFile##*/}"
 
 		if [[ $possibleFileBasename == 'bootstrap.sh' ]]; then

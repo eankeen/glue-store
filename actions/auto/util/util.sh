@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-util:get_working_dir() {
+util_get_working_dir() {
 	while [ ! -f "glue.sh" ] && [ "$PWD" != / ]; do
 		cd ..
 	done

@@ -2,7 +2,12 @@
 
 eval "$GLUE_COMMANDS_BOOTSTRAP"
 bootstrap
+bootstrap_init
 
-# glue requireActions(do-npm-build)
+# glue requireAction(do-npm-build.sh)
 
-log_info "Content"
+# source "$GLUE_ACTIONS_DIR/do-npm-build.sh"
+
+log:info "Content"
+
+# util:get_action prettier.config.js

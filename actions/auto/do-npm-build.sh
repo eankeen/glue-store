@@ -1,7 +1,8 @@
-# shellcheck shell=sh
+#!/usr/bin/env bash
 
 eval "$GLUE_ACTIONS_BOOTSTRAP"
 bootstrap
+init
 
 # glue requireConfigs(prettier.config.js)
 
