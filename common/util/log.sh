@@ -1,8 +1,8 @@
 # shellcheck shell=bash
 
 # Print error, then exit failure code '1' immediately
-log.die() {
-	log:error "${*-"log.die: Terminate application"}. Exiting"
+die() {
+	log.error "${*-"log.die: Terminate application"}. Exiting"
 	exit 1
 }
 
@@ -31,9 +31,4 @@ log.error() {
 	else
 		printf "\033[0;31m%s\033[0m\n" "Error: $*" >&2
 	fi
-}
-
-# Pretty log the currently running action
-log.running_action() {
-	:
 }

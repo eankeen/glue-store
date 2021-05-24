@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 eval "$GLUE_ACTIONS_BOOTSTRAP"
-bootstrap
+bootstrap || exit
 
-# glue requireConfig(.prettierrc.js)
+# glue useConfig(.prettierrc.js)
 
-util.get_config -q '.prettierrc.js'
+util.get_config '.prettierrc.js'
+
+unbootstrap

@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 eval "$GLUE_ACTIONS_BOOTSTRAP"
-bootstrap
+bootstrap || exit
 
-# glue requireConfig(.eslintrc.js)
+# glue useConfig(.eslintrc.js)
 
 util.ln_config ".eslintrc.js"
+
+unbootstrap

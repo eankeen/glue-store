@@ -4,7 +4,7 @@
 # in 'actions/{,auto/}*'
 
 # Check if  we have already bootstraped. This is useful if an
-# action file is source'd
+# action file is sourced
 if [ ! "$GLUE_ACTIONS_BOOTSTRAP_DID" = yes ]; then
 	GLUE_ACTIONS_BOOTSTRAP_DID=yes
 

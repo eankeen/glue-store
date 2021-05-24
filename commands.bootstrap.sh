@@ -3,7 +3,7 @@
 # The following is eval'ed as 'eval "$GLUE_COMMANDS_BOOTSTRAP"'
 # in 'commands/{,auto/}*'
 
-# Although all 'commands' are executed rather than source'd,
+# Although all 'commands' are executed rather than sourced,
 # it won't hurt to make the top-level check
 if [ ! "$GLUE_COMMANDS_BOOTSTRAP_DID" = yes ]; then
 	GLUE_COMMANDS_BOOTSTRAP_DID=yes

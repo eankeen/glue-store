@@ -27,7 +27,7 @@ util.get_file() {
 	elif [ -f "$GLUE_WD/.glue/$dir/auto/$file" ]; then
 		REPLY="$GLUE_WD/.glue/$dir/auto/$file"
 	else
-		error.file_not_found_in_glue_store "$file" "$dir"
+		error.file_not_found_in_dot_glue_dir "$file" "$dir"
 	fi
 }
 
@@ -35,11 +35,11 @@ util.get_file() {
 # Pass '-q' as the first arg to set the result to
 # '$REPLY' rather than outputing to standard output
 util.get_action() {
-	if [ "$1" = "-q" ]; then
+	if [ "$1" = "-p" ]; then
 		util.get_file "actions" "$2"
+		printf "%s\n" "$REPLY"
 	else
 		util.get_file "actions" "$1"
-		printf "%s\n" "$REPLY"
 	fi
 }
 
@@ -47,11 +47,11 @@ util.get_action() {
 # Pass '-q' as the first arg to set the result to
 # '$REPLY' rather than outputing to standard output
 util.get_command() {
-	if [ "$1" = "-q" ]; then
+	if [ "$1" = "-p" ]; then
 		util.get_file "commands" "$2"
+		printf "%s\n" "$REPLY"
 	else
 		util.get_file "commands" "$1"
-		printf "%s\n" "$REPLY"
 	fi
 }
 
@@ -59,20 +59,30 @@ util.get_command() {
 # Pass '-q' as the first arg to set the result to
 # '$REPLY' rather than outputing to standard output
 util.get_config() {
-	if [ "$1" = "-q" ]; then
+	if [ "$1" = "-p" ]; then
 		util.get_file "configs" "$2"
+		printf "%s\n" "$REPLY"
 	else
 		util.get_file "configs" "$1"
-		printf "%s\n" "$REPLY"
 	fi
 }
 
 util.ln_config() {
+	ensure.args 'util.ln_config' "$@"
+
 	if [ -f "$GLUE_WD/.glue/configs/$1" ]; then
 		ln -sfT ".glue/configs/$1" "$GLUE_WD/$1"
 	elif [ -f "$GLUE_WD/.glue/configs/auto/$1" ]; then
 		ln -sfT ".glue/configs/auto/$1" "$GLUE_WD/$1"
 	else
-		error.file_not_found_in_glue_store "$1" 'configs'
+		error.file_not_found_in_dot_glue_dir "$1" 'configs'
 	fi
+}
+
+# Set or unset a shopt parameter, which will be reversed
+# during the bootstrap.deinit phase
+util.shopt() {
+	ensure.args 'util.shopt' "$@"
+
+	_util_shopt_data+="$1.$2 "
 }

@@ -3,10 +3,34 @@
 bootstrap.init() {
 	set -Eo pipefail
 
-	trap sigint INT
-	sigint() {
+	trap 'bootstrap.init.int' INT
+	bootstrap.init.int() {
 		die 'Received SIGINT'
 	}
+
+	_original_wd="$PWD"
+	trap 'bootstrap.init.exit' EXIT
+	bootstrap.init.exit() {
+		# shellcheck disable=SC2164
+		cd "$_original_wd"
+	}
+}
+
+bootstrap.deinit() {
+	for option in $_util_shopt_data; do
+		optionValue="${option%.*}"
+		optionName="${option#*.}"
+
+		local newOptionValue
+		case "$optionValue" in
+			-s) newOptionValue="-u" ;;
+			-u) newOptionValue="-s" ;;
+		esac
+
+		shopt "$newOptionValue" "$optionName"
+	done
+
+	_util_shopt_data=
 }
 
 bootstrap.abstract() {
