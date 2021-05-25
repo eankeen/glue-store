@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-eval "$GLUE_ACTIONS_BOOTSTRAP"
+eval "$GLUE_BOOTSTRAP"
 bootstrap || exit
 
 if [ -f "$GLUE_WD/package-lock.json" ]; then

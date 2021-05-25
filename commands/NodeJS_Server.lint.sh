@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-eval "$GLUE_COMMANDS_BOOTSTRAP"
+eval "$GLUE_BOOTSTRAP"
 bootstrap || exit
 
 # glue useAction(do-tool-prettier-init.sh)

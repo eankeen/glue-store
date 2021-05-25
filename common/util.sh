@@ -84,5 +84,6 @@ util.ln_config() {
 util.shopt() {
 	ensure.args 'util.shopt' "$@"
 
+	shopt "$1" "$2"
 	_util_shopt_data+="$1.$2 "
 }
