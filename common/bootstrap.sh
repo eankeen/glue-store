@@ -64,7 +64,7 @@ bootstrap() {
 		source "$file"
 	done
 
-	local dir="${BASH_SOURCE[-1]}"
+	local dir="${BASH_SOURCE[1]}"
 	dir="${dir%/*}"
 	if [ "$GLUE_IS_AUTO" ]; then
 		dir="${dir%/*}"
