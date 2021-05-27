@@ -2,8 +2,8 @@
 eval "$GLUE_BOOTSTRAP"
 bootstrap || exit
 
-# glue useConfig(.eslintrc.js)
+ensure.cmd 'exportloopref'
 
-util.ln_config ".eslintrc.js"
+exportloopref -fix ./...
 
 unbootstrap

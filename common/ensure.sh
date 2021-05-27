@@ -7,15 +7,27 @@ ensure.cmd() {
 }
 
 ensure.args() {
-	fnName="$1"
-	shift
+	local fnName="$1"
+	local argNums="$2"
+	shift; shift;
 
-	n=1
-	for arg; do
-		if [ -z "$arg" ]; then
-			die "$fnName: Argument $n missing"
+	local argNum
+	for argNum in $argNums; do
+		if [ -z "${!argNum}" ]; then
+		# if [ -z "${@:$argNum:1}" ]; then
+			echo "Context: '$0'" >&2
+			echo "Context \${BASH_SOURCE[*]}: ${BASH_SOURCE[*]}" >&2
+			log.error "ensure.args: Function '$fnName' has missing arguments" >&2
+			exit 1
 		fi
-
-		n=$((n+1))
 	done
+}
+
+ensure.nonZero() {
+	varName="$1"
+	varValue="$2"
+
+	if [ -z "$varValue" ]; then
+		die "ensure.nonZero: Variable '$varName' must be non zero"
+	fi
 }

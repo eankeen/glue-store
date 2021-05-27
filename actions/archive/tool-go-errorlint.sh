@@ -2,7 +2,8 @@
 eval "$GLUE_BOOTSTRAP"
 bootstrap || exit
 
-# docker
-# node-prune
+ensure.cmd 'go-errorlint'
+
+go-errorlint -fix ./...
 
 unbootstrap

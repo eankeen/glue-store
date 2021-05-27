@@ -2,7 +2,7 @@
 eval "$GLUE_BOOTSTRAP"
 bootstrap || exit
 
-# docker
-# node-prune
+# glue useConfig(.eslintrc.js)
+util.ln_config ".eslintrc.js"
 
 unbootstrap

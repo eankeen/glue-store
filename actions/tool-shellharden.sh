@@ -4,8 +4,8 @@ bootstrap || exit
 
 ensure.cmd 'shellharden'
 
-util.shopt -s nullglob
 util.shopt -s dotglob
+util.shopt -s nullglob
 
 # shellharden --suggest -- ./**/*.{sh,bash}
 # shellharden --check -- ./**/*.{sh,bash}

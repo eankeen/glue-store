@@ -2,7 +2,8 @@
 eval "$GLUE_BOOTSTRAP"
 bootstrap || exit
 
-# docker
-# node-prune
+ensure.cmd 'gci'
+
+gci -w .
 
 unbootstrap

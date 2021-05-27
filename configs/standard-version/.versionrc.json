@@ -1,0 +1,8 @@
+{
+	"bumpFiles": [
+		{
+			"filename": "glue-auto.toml",
+			"updater": ".glue/configs/auto/glue-auto-updater.js"
+		}
+	]
+}

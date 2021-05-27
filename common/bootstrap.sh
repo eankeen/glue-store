@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 bootstrap() {
-	set -Eo pipefail
+	set -eEo pipefail
 
 	trap 'bootstrap.int' INT
 	bootstrap.int() {
@@ -99,4 +99,23 @@ unbootstrap() {
 	done
 
 	_util_shopt_data=
+
+	local dir="${BASH_SOURCE[1]}"
+	dir="${dir%/*}"
+	if [ "$GLUE_IS_AUTO" ]; then
+		dir="${dir%/*}"
+	fi
+	dir="${dir##*/}"
+
+	# Print
+	case "$dir" in
+	actions)
+		echo ":: :: END ACTION"
+		;;
+	commands)
+		echo ":: END COMMAND"
+		;;
+	*)
+		die "boostrap: Directory '$dir' not supported"
+	esac
 }

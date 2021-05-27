@@ -2,9 +2,11 @@
 eval "$GLUE_BOOTSTRAP"
 bootstrap || exit
 
-util.shopt -s nullglob
-util.shopt -s dotglob
+ensure.cmd 'gofmt'
 
-shellcheck --check-sourced -- ./**/*.{sh,bash}
+util.shopt -s dotglob
+util.shopt -s nullglob
+
+gofmt -s -l -w ./**/*.go
 
 unbootstrap

@@ -2,7 +2,6 @@
 eval "$GLUE_BOOTSTRAP"
 bootstrap || exit
 
-# docker
-# node-prune
+ensure.cmd 'conventional-changelog'
 
 unbootstrap
