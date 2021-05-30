@@ -3,8 +3,7 @@
 # The following is eval'ed as 'eval "$GLUE_BOOTSTRAP"'
 # in either '{commands,actions}/{,auto/}*'
 
-# Check if  we have already bootstraped. This is useful if an
-# action file is sourced
+# Check if  we have already bootstraped. This is useful for multiple sources of files
 if [ ! "$GLUE_BOOTSTRAP_DID" = yes ]; then
 	GLUE_BOOTSTRAP_DID=yes
 

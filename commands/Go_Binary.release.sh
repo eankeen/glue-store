@@ -45,7 +45,7 @@ else
 fi
 
 # Remote Release
-toml.get_key name glue.toml
+toml.get_key project glue.toml
 projectName="${REPLY:-Release}"
 gh release create "v$newVersion" --target main --title "$projectName v$newVersion" "${args[@]}"
 

@@ -4,7 +4,8 @@ bootstrap || exit
 
 ensure.cmd 'nimpretty'
 
-util.shopt -u dotglob
+util.shopt -s dotglob
+util.shopt -s globstar
 util.shopt -u nullglob
 
 # TODO: editorconfig for -indent, maxLineLen

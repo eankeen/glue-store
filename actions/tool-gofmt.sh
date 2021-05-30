@@ -4,9 +4,7 @@ bootstrap || exit
 
 ensure.cmd 'gofmt'
 
-util.shopt -s dotglob
-util.shopt -s nullglob
-
-gofmt -s -l -w ./**/*.go
+go list -f '{{.Dir}}' ./... \
+	| xargs gofmt -s -l -w
 
 unbootstrap
