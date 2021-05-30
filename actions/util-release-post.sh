@@ -7,6 +7,7 @@ bootstrap || exit
 # - Ensure a dirty Git working tree
 # - Add bumped files to commit with version number
 # - Make GitHub release
+
 unset main
 main() {
 	local -r dryStatus="$1"
@@ -64,4 +65,6 @@ main() {
 }
 
 main "$@"
+unset main
+
 unbootstrap

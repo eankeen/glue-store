@@ -8,7 +8,6 @@ util.shopt -s dotglob
 util.shopt -s globstar
 util.shopt -u nullglob
 
-# TODO: editorconfig for -indent, maxLineLen
-nimpretty ./**/*.nim
+nimpretty --maxLinelen:100 ./**/*.nim
 
 unbootstrap

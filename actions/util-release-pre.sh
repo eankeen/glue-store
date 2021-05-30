@@ -70,7 +70,7 @@ main() {
 
 		# Ensure new version is valid (does not already exist)
 		if [ -n "$(git tag -l "v$newVersion")" ]; then
-			# TODO: ensure there are no tag sthat exists that are greater than it
+			# TODO: ensure there are no tags that exists that are greater than it
 			die 'Version already exists in a Git tag'
 		fi
 	fi
@@ -79,4 +79,6 @@ main() {
 }
 
 main "$@"
+unset main
+
 unbootstrap
