@@ -49,15 +49,15 @@ util.get_action() {
 	fi
 }
 
-# Get any particular file in the 'commands' directory
+# Get any particular file in the 'tasks' directory
 # Pass '-q' as the first arg to set the result to
 # '$REPLY' rather than outputing to standard output
-util.get_command() {
+util.get_task() {
 	if [ "$1" = "-p" ]; then
-		util.get_file "commands" "$2"
+		util.get_file "tasks" "$2"
 		printf "%s\n" "$REPLY"
 	else
-		util.get_file "commands" "$1"
+		util.get_file "tasks" "$1"
 	fi
 }
 

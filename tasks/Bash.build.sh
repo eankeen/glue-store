@@ -20,7 +20,7 @@ task() {
 	source "$REPLY"
 
 	# With 'set -e' enabled, the previous commands
-	# were successfull; otherwise, we wouldn't be here
+	# were successful; otherwise, we wouldn't be here
 	REPLY=0
 }
 

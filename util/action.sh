@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# @description Print the currently running command
+# @description Print the currently running action
 # @noargs
-# @see command.log
+# @see task.log
 action.log() {
 	# ${BASH_SOURCE[0]}: Ex. ~/.../.glue/actions/auto/util/action.sh
 	# ${BASH_SOURCE[1]}: Ex. ~/.../.glue/actions/auto/util/bootstrap.sh

@@ -20,8 +20,8 @@ bootstrap() {
 		cd "$_original_wd"
 	}
 
-	# source files in 'common'
-	local dir="common"
+	# source files in 'util'
+	local dir="util"
 
 	shopt -q nullglob
 	local shoptExitStatus="$?"
@@ -84,8 +84,8 @@ bootstrap() {
 	actions)
 		action.log
 		;;
-	commands)
-		command.log
+	tasks)
+		task.log
 		;;
 	*)
 		die "boostrap: Directory '$dir' not supported"
@@ -121,11 +121,11 @@ unbootstrap() {
 
 	# Print
 	case "$dir" in
-	commands)
+	tasks)
 		if [[ "${LANG,,?}" == *utf?(-)8 ]]; then
-			echo "■■ 🢀  END COMMAND"
+			echo "■■ 🢀  END TASK"
 		else
-			echo ":: <= END COMMAND"
+			echo ":: <= END TASK"
 		fi
 
 		;;

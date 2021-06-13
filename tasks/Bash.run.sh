@@ -8,7 +8,7 @@ task() {
 	ensure.nonZero 'cmdName' "$cmdName"
 	shift
 
-	util.get_command 'Bash.build.sh'
+	util.get_task 'Bash.build.sh'
 	source "$REPLY"
 
 	local -a args=()

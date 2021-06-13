@@ -1,6 +1,6 @@
 # General Steps for Tasks
 
-Common task identifiers like 'build', 'docs', 'lint' are common across languages. This document lists them with some explanations. Depending on the project type, some commands may accept flags. For example, use `glue cmd docs -- --help` to show the help, if applicable
+Common task identifiers like 'build', 'docs', 'lint' are common across languages. This document lists them with some explanations. Depending on the project type, some tasks may accept flags. For example, use `glue cmd docs -- --help` to show the help, if applicable
 
 ## docs
 

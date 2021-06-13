@@ -25,22 +25,22 @@ task() {
 
 	## 2
 	# Build docs
-	util.get_command 'Bash.docs.sh'
+	util.get_task 'Bash.docs.sh'
 	source "$REPLY"
 	ensure.exit_code_success "$REPLY"
 
 	# Lint
-	util.get_command 'Bash.lint.sh'
+	util.get_task 'Bash.lint.sh'
 	source "$REPLY"
 	ensure.exit_code_success "$REPLY"
 
 	# Build
-	util.get_command 'Bash.build.sh'
+	util.get_task 'Bash.build.sh'
 	source "$REPLY"
 	ensure.exit_code_success "$REPLY"
 
 	# Test
-	util.get_command 'Bash.test.sh'
+	util.get_task 'Bash.test.sh'
 	source "$REPLY"
 	ensure.exit_code_success "$REPLY"
 
