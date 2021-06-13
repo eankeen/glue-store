@@ -2,6 +2,9 @@
 
 bootstrap() {
 	set -eEo pipefail
+	shopt -s extglob
+
+	unset main task action
 
 	trap 'bootstrap.int' INT
 	bootstrap.int() {
@@ -58,7 +61,9 @@ bootstrap() {
 		fi
 	done
 
-	(( shoptExitStatus != 0 )) && shopt -u nullglob
+	if (( shoptExitStatus != 0 )); then
+		shopt -u nullglob
+	fi
 
 	for file in "${filesToSource[@]}"; do
 		source "$file"
@@ -85,6 +90,8 @@ bootstrap() {
 }
 
 unbootstrap() {
+	unset main task action
+
 	for option in $_util_shopt_data; do
 		optionValue="${option%.*}"
 		optionName="${option#*.}"
@@ -111,17 +118,17 @@ unbootstrap() {
 	case "$dir" in
 	commands)
 		if [[ "${LANG,,?}" == *utf?(-)8 ]]; then
-			echo "■■ 🢂  END COMMAND"
+			echo "■■ 🢀  END COMMAND"
 		else
-			echo ":: => END COMMAND"
+			echo ":: <= END COMMAND"
 		fi
 
 		;;
 	actions)
 		if [[ "${LANG,,?}" == *utf?(-)8 ]]; then
-			echo "■■■■ 🢂  END ACTION"
+			echo "■■■■ 🢀  END ACTION"
 		else
-			echo ":::: => END ACTION"
+			echo ":::: <= END ACTION"
 		fi
 		;;
 	*)

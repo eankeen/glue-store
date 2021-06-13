@@ -9,7 +9,7 @@ bootstrap || exit
 
 # toast --shell
 
-main() {
+action() {
 	ensure.file glue.toml
 	ensure.file glue-auto.toml
 
@@ -65,6 +65,5 @@ main() {
 	generated.out
 }
 
-main "$@"
-
+action "$@"
 unbootstrap

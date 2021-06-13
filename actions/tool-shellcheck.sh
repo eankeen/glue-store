@@ -14,6 +14,6 @@ util.shopt -u dotglob
 util.shopt -s globstar
 util.shopt -s nullglob
 
-shellcheck --check-sourced -- ./**/*.{sh,ksh,bash}
+shellcheck --check-sourced -- ./**/?*.{sh,ksh,bash}
 
 unbootstrap

@@ -1,12 +1,13 @@
 # shellcheck shell=bash
 
-# Print error, then exit failure code '1' immediately
+# @description Print error, then exit failure code '1' immediately
+# @exitcode 1
 die() {
 	log.error "${*-"log.die: Terminate application"}. Exiting"
 	exit 1
 }
 
-# Print info
+# @description Print info
 log.info() {
 	if [[ -v NO_COLOR || $TERM = dumb ]]; then
 		printf "%s\n" "Info: $*"
@@ -15,7 +16,7 @@ log.info() {
 	fi
 }
 
-# Print warning
+# @description Print warning
 log.warn() {
 	if [[ -v NO_COLOR || $TERM = dumb ]]; then
 		printf "%s\n" "Warn: $*"
@@ -24,7 +25,7 @@ log.warn() {
 	fi
 }
 
-# Print error
+# @description Print error
 log.error() {
 	if [[ -v NO_COLOR || $TERM = dumb ]]; then
 		printf "%s\n" "Error: $*"

@@ -9,15 +9,15 @@ command.log() {
 
 	if [ "${currentCommandDirname##*/}" = auto ]; then
 		if [[ "${LANG,,?}" == *utf?(-)8 ]]; then
-			echo "■■ 🢂  START COMMAND -> auto/${currentCommand##*/}"
+			echo "■■ 🢂  START COMMAND: 'auto/${currentCommand##*/}'"
 		else
-			echo ":: => START COMMAND -> auto/${currentCommand##*/}"
+			echo ":: => START COMMAND: 'auto/${currentCommand##*/}'"
 		fi
 	else
 		if [[ "${LANG,,?}" == *utf?(-)8 ]]; then
-			echo "■■ 🢂  START COMMAND -> ${currentCommand##*/}"
+			echo "■■ 🢂  START COMMAND: '${currentCommand##*/}'"
 		else
-			echo ":: => START COMMAND -> ${currentCommand##*/}"
+			echo ":: => START COMMAND: '${currentCommand##*/}'"
 		fi
 	fi
 }

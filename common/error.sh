@@ -25,3 +25,15 @@ error.empty() {
 error.not_executable() {
 	die "File '$1' is not marked as executable"
 }
+
+error.non_conforming() {
+	local reason="$1"
+
+	ensure.nonZero 'reason' "$reason"
+
+	die "Your project layout is non-conforming: $reason"
+}
+
+error.generated_failed() {
+	die "Failure in subshell preceding 'generated.out'"
+}
