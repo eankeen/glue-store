@@ -1,5 +1,8 @@
 # shellcheck shell=bash
 
+# @name util.sh
+# @brief Common miscellaneous functions
+
 # Get the absolute path of the absolute working directory of
 # the current project. Do not specify function with '()' because
 # we assume consumer invokes function in subshell to capture output
@@ -91,15 +94,62 @@ util.shopt() {
 	_util_shopt_data+="$1.$2 "
 }
 
-util.prompt_new_version() {
-	local currentVersion="$1"
-
-	ensure.nonZero 'currentVersion' "$currentVersion"
-
-	# TODO: make incremenet better
+util.prompt_new_version_string() {
 	REPLY=
-	echo "Current Version: $currentVersion"
-	read -rp 'New Version? ' -ei "$currentVersion"
+
+	local newVersion=
+	if is.wet_release; then
+		toml.get_key 'version' 'glue-auto.toml'
+		currentVersion="$REPLY"
+
+		# TODO: make incremenet better
+		echo "Current Version: $currentVersion"
+		read -rp 'New Version? ' -ei "$currentVersion"
+
+		newVersion="$REPLY"
+
+		ensure.nonZero 'newVersion' "$newVersion"
+		ensure.version_is_only_major_minor_patch "$newVersion"
+		ensure.git_version_tag_validity "$newVersion"
+	else
+		# When in 'dry' mode, the 'new version' is just the current version
+		toml.get_key 'version' 'glue-auto.toml'
+		newVersion="$REPLY"
+
+		ensure.nonZero 'newVersion' "$newVersion"
+
+		# The extra checks for major_minor_patch (and Git tag validity) aren't
+		# checked since we expect to see the commit (and potentially '-DIRTY')
+		# in the version. If a particular tool doesn't allow adding '-' or '+'
+		# to the version, we handle it on the spot, in that particular context
+	fi
+
+	REPLY="$newVersion"
+}
+
+# @description Writes the new version string to 'glue-auto.toml'
+# and any relevant source files
+util.update_version_strings() {
+	local version="$1"
+
+	ensure.nonZero 'version' "$version"
+
+	ensure.file 'glue-auto.toml'
+
+	# Write version
+	if grep -q 'version' glue-auto.toml; then
+		sed -i -e "s|\(version[ \t]*=[ \t]*[\"']\).*\([\"']\)|\1${version}\2|g" glue-auto.toml
+	else
+		echo "version = '$version'" >| glue-auto.toml
+	fi
+
+	# Write version (project type specific)
+	if command -v custom.bump_version_hook &>/dev/null; then
+		if ! custom.bump_version_hook "$version"; then
+			die "Hook 'custom.bump_version_hook' did not complete successfully"
+		fi
+	fi
+	unset custom.bump_version_hook
 }
 
 util.extract_version_string() {

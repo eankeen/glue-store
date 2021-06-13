@@ -1,10 +1,12 @@
 # shellcheck shell=bash
 
+# @description Bootstraps a particular 'action' or 'task' file
+# @noargs
 bootstrap() {
 	set -eEo pipefail
 	shopt -s extglob
 
-	unset main task action
+	unset REPLY task action
 
 	trap 'bootstrap.int' INT
 	bootstrap.int() {
@@ -34,6 +36,7 @@ bootstrap() {
 		filesToSource+=("$file")
 	done
 
+	# TODO: This sourcing does not need to be ran every time
 	# Add an 'auto' file if it doesn not have a name of 'bootstrap.sh',
 	# or if the name does not already exist in the filesToSource array
 	for possibleFile in "$GLUE_WD/.glue/$dir/auto"/*?.sh; do
@@ -89,8 +92,10 @@ bootstrap() {
 	esac
 }
 
+# @description 'Unbootstraps' a particular 'action' or 'task' file
+# @noargs
 unbootstrap() {
-	unset main task action
+	unset task action
 
 	for option in $_util_shopt_data; do
 		optionValue="${option%.*}"

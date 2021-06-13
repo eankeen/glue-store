@@ -17,9 +17,6 @@ task() {
 	else
 		log.info "Running pre-release process in dry mode"
 	fi
-	ensure.cmd 'git'
-	ensure.cmd 'gh'
-	ensure.file 'glue-auto.toml'
 
 	## 1
 	ensure.git_repository_initialized
@@ -50,68 +47,37 @@ task() {
 	## 3
 	ensure.git_only_version_changes
 
-	## 4
-	local newVersion=
-	if is.wet_release; then
-		# Running 'build' ensures this is correct
-		toml.get_key 'version' 'glue-auto.toml'
-		util.prompt_new_version "$REPLY"
-		newVersion="$REPLY"
-
-		ensure.nonZero 'newVersion' "$newVersion"
-		ensure.version_is_only_major_minor_patch "$newVersion"
-		ensure.git_version_tag_validity "$newVersion"
-	else
-		toml.get_key 'version' 'glue-auto.toml'
-		newVersion="$REPLY"
-
-		ensure.nonZero 'newVersion' "$newVersion"
-	fi
+	util.prompt_new_version_string
+	local version="$REPLY"
 
 	custom.bump_version_hook() {
+		local version="$1"
+
 		# glue useAction(util-Bash-version-bump.sh)
 		util.get_action 'util-Bash-version-bump.sh'
-		source "$REPLY" "$newVersion"
+		source "$REPLY" "$version"
 	}
-	hook.bump_version "$newVersion"
+	util.update_version_strings "$version"
 
-	## 5
 	ensure.git_only_version_changes
 
-	## 6
+	## 4
 	# glue useAction(tool-conventional-changelog.sh)
 	util.get_action 'tool-conventional-changelog.sh'
-	source "$REPLY" "$newVersion"
-	local currentChangelog="$REPLY"
+	source "$REPLY" "$version"
+	local changelogFile="$REPLY"
 
-	ensure.nonZero 'currentChangelog' "$currentChangelog"
-	ensure.file "$currentChangelog"
+	## 5
+	# glue useAction(effect-git-tag.sh)
+	util.get_action 'effect-git-tag.sh'
+	source "$REPLY" "$version"
+
+	## 6
+	# glue useAction(effect-github-release.sh)
+	util.get_action 'effect-github-release.sh'
+	source "$REPLY" "$version" "$changelogFile"
 
 	## 7
-	if is.wet_release; then
-		git add -A
-		git commit -m "chore(release): v$newVersion"
-		git tag -a "v$newVersion" -m "Release $newVersion" HEAD
-		git push --follow-tags origin HEAD
-
-		local -a args=()
-		if [ -f "$currentChangelog" ]; then
-			args+=('-F' "$currentChangelog")
-		else
-			# '-n' is required for non-interactivity
-			args+=('-n' '')
-			log.warn 'CHANGELOG.md file not found. Creating empty notes file for release'
-		fi
-
-		# Remote Release
-		gh release create "v$newVersion" --target main --title "v$newVersion" "${args[@]}"
-	else
-		log.info "Skipping Git taging and GitHub artifact release"
-	fi
-
-	## 8
-
-	## 9
 	# # glue useAction(result-pacman-package.sh)
 	# util.get_action 'result-pacman-package.sh'
 	# source "$REPLY"

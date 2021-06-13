@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-# Log the currently running command
+# @description Log the currently running command
+# @noargs
+# @see action.log
 command.log() {
 	# Path to the currently actually executing 'action' script
 	# This works on the assumption that 'source's are all absolute paths

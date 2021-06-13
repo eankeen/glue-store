@@ -10,6 +10,9 @@ task() {
 	# glue useAction(tool-shellharden.sh)
 	# util.get_action 'tool-shellharden.sh'
 	# source "$REPLY"
+
+	# shellcheck disable=SC2269
+	REPLY="$REPLY"
 }
 
 task "$@"

@@ -1,11 +1,7 @@
 # shellcheck shell=bash
 
-# @description Print error, then exit failure code '1' immediately
-# @exitcode 1
-die() {
-	log.error "${*-"log.die: Terminate application"}. Exiting"
-	exit 1
-}
+# @name log.sh
+# @brief Only contains simple logging functions
 
 # @description Print info
 log.info() {

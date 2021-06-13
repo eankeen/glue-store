@@ -4,18 +4,24 @@ bootstrap || exit
 
 task() {
 	util.extract_version_string
-	local newVersion="$REPLY"
+	local version="$REPLY"
 
 	custom.bump_version_hook() {
+		local version="$1"
+
 		# glue useAction(util-Bash-version-bump.sh)
 		util.get_action 'util-Bash-version-bump.sh'
-		source "$REPLY" "$newVersion"
+		source "$REPLY" "$version"
 	}
-	hook.bump_version "$newVersion"
+	util.update_version_strings "$version"
 
 	# glue useAction(util-Bash-generate-bins.sh)
 	util.get_action 'util-Bash-generate-bins.sh'
 	source "$REPLY"
+
+	# With 'set -e' enabled, the previous commands
+	# were successfull; otherwise, we wouldn't be here
+	REPLY=0
 }
 
 task "$@"
