@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 eval "$GLUE_BOOTSTRAP"
-bootstrap || exit
+bootstrap
 
 # docker
 # node-prune

@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
+eval "$GLUE_BOOTSTRAP"
+bootstrap
 
-# glue useAction(tool-golangci-lint.sh)
+task() {
+	go build -ldflags "-X main.version=1.0.1" main.go
+}
 
-go build -ldflags "-X main.version=1.0.1" main.go
+
+task "$@"
+unbootstrap

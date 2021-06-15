@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 eval "$GLUE_BOOTSTRAP"
-bootstrap || exit
+bootstrap
 
 # makerepropkg *.zst
 # repro -f *.zst
@@ -34,11 +34,11 @@ action() {
 	ensure.nonZero 'myEmail' "$myEmail"
 	ensure.nonZero 'myVer' "$myVer"
 
-	# glue useConfig(result-pacman-package)
-	util.get_config "result-pacman-package/dev/PKGBUILD"
-	pkgbuildFile="$REPLY"
+	# glue useConfig(effect-pacman-package)
+	util.get_config "effect-pacman-package/dev/PKGBUILD"
+	cfgPkgbuild="$REPLY"
 
-	generated.in 'result-pacman-package'
+	bootstrap.generated 'effect-pacman-package'
 	(
 		cd "$GENERATED_DIR" || error.cd_failed
 		mkdir dev
@@ -47,7 +47,7 @@ action() {
 		tar --create --directory "$GLUE_WD" --file "$myProject-$myVer.tar.gz" --exclude './.git' \
 				--exclude "$myProject-$myVer.tar.gz" --transform "s/^\./$myProject-$myVer/" ./
 
-		cp "$pkgbuildFile" .
+		cp "$cfgPkgbuild" .
 		sed -i -e "s/# Maintainer:.*/# Maintainer: $myName <$myEmail>/g" PKGBUILD
 		sed -i -e "s/pkgname=.*\$/pkgname='$myProject'/g" PKGBUILD
 		sed -i -e "s/pkgver=.*\$/pkgver='$myVer'/g" PKGBUILD
@@ -62,7 +62,7 @@ action() {
 		makepkg -Cfsrc
 		namcap ./*.zst
 	) || exit
-	generated.out
+	unbootstrap.generated
 }
 
 action "$@"

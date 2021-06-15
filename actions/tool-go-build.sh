@@ -3,10 +3,9 @@ eval "$GLUE_BOOTSTRAP"
 bootstrap
 
 action() {
-	ensure.cmd 'gofmt'
+	ensure.cmd 'go'
 
-	go list -f '{{.Dir}}' ./... \
-		| xargs gofmt -s -l -w
+	go build ./...
 }
 
 action "$@"

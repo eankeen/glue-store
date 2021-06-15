@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 eval "$GLUE_BOOTSTRAP"
-bootstrap || exit
+bootstrap
 
 # glue useAction(do-tool-prettier-init.sh)
 # glue useAction(do-tool-eslint-init.sh)

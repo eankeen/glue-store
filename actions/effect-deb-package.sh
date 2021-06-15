@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 eval "$GLUE_BOOTSTRAP"
-bootstrap || exit
+bootstrap
 
+action() {
+	:
+}
+
+action "$@"
 unbootstrap

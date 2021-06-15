@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 eval "$GLUE_BOOTSTRAP"
-bootstrap || exit
+bootstrap
 
 ensure.cmd 'conventional-changelog'
 
@@ -15,16 +15,16 @@ action() {
 
 	# glue useConfig(tool-conventional-changelog)
 	util.get_config 'tool-conventional-changelog/context.json'
-	local configContextJson="$REPLY"
+	local cfgContextJson="$REPLY"
 
 	toml.get_key 'gitRepoName' 'glue.toml'
 	local gitRepoName="$REPLY"
 	ensure.nonZero 'gitRepoName' "$gitRepoName"
 
-	generated.in 'tool-conventional-changelog'; (
+	bootstrap.generated 'tool-conventional-changelog'; (
 		cd "$GENERATED_DIR" || error.cd_failed
 
-		cp "$configContextJson" .
+		cp "$cfgContextJson" .
 		sed -i \
 			-e "s/TEMPLATE_CONTEXT_VERSION/$version/g" \
 			-e "s/TEMPLATE_CONTEXT_REPOSITORY/$gitRepoName/g" \
@@ -46,7 +46,7 @@ action() {
 			--release-count 1 \
 			--context "context.json" \
 			--commit-path "$GLUE_WD"
-	); generated.out
+	); unbootstrap.generated
 
 	REPLY="$GENERATED_DIR/CHANGELOG-CURRENT.md"
 }

@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 eval "$GLUE_BOOTSTRAP"
-bootstrap || exit
+bootstrap
 
-# glue useConfig(golangci-lint)
-util.ln_config "golangci-lint/.golangci.yaml" ".golangci.yaml"
+action() {
+	# glue useConfig(golangci-lint)
+	util.ln_config "golangci-lint/.golangci.yaml" ".golangci.yaml"
 
-ensure.cmd 'golangci-lint'
+	ensure.cmd 'golangci-lint'
 
-golangci-lint run --enable-all ./...
+	golangci-lint run --enable-all ./...
+}
 
+action "$@"
 unbootstrap

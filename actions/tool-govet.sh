@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 eval "$GLUE_BOOTSTRAP"
-bootstrap || exit
+bootstrap
 
-ensure.cmd 'go'
+action() {
+	ensure.cmd 'go'
 
-go get ./...
+	go get ./...
+}
 
+action "$@"
 unbootstrap

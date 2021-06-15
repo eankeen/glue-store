@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 eval "$GLUE_BOOTSTRAP"
-bootstrap || exit
+bootstrap
 
-# glue useAction(do-nim-format.sh)
-util.get_action "do-nim-format.sh"
+# glue useAction(tool-nim-format.sh)
+util.get_action "tool-nim-format.sh"
 source "$REPLY"
 
-# glue useAction(do-nim-lint.sh)
-util.get_action "do-nim-lint.sh"
+# glue useAction(tool-nim-lint.sh)
+util.get_action "tool-nim-lint.sh"
 source "$REPLY"
 
-# glue useAction(do-nim-build.sh)
-util.get_action "do-nim-build.sh"
+# glue useAction(tool-nim-build.sh)
+util.get_action "tool-nim-build.sh"
 source "$REPLY"
