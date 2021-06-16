@@ -87,8 +87,20 @@ main() {
 	declare -g file
 	declare -gr ignoreFile="./scripts/lint-ignore"
 
-	# Hack because last line is cutoff
-	cat >> "$ignoreFile" <<< $'\n'
+	# Hack because not having extra lines at end of ignore fails parser
+	# This simply ensures there are always three empty lines at the end
+	# of the file
+	IGNORE_FILE="$ignoreFile" perl -e "$(cat <<-"EOF"
+	use warnings;
+	use strict;
+	open my $fh, '<', $ENV{'IGNORE_FILE'} or die "Can't open file $!";
+	my $file_content = do { local $/; <$fh> };
+	my $newstring = $file_content =~ s/\n*\Z/\n\n/gr;
+	open(FH, '>', $ENV{'IGNORE_FILE'}) or die $!;
+	print FH $newstring;
+	close(FH);
+	EOF
+	)"
 
 	for file in ./{actions,tasks,util}/?*.sh; do
 		if lastMatched="$(grep -P "(?<!ensure\.)cd[ \t]+" "$file")"; then
@@ -145,6 +157,33 @@ main() {
 		if [ "$(util:get_n -2 "$file")" != 'task "$@"' ]; then
 			util:print_lint 108 "Third to last line must have 'task \"\$@\"'"
 		fi
+	done
+
+	for file in ./util/?*.sh; do
+		local currentFn=
+		local -i count=0
+		while IFS= read -r line; do
+			if ((count == 0)); then
+				if [[ $line =~ ^ensure\.(.*)\(\) ]]; then
+					currentFn="ensure.${BASH_REMATCH[1]}"
+					count=$((1))
+				fi
+			elif ((count == 1)); then
+				local regex="local fn=['\"]?${currentFn}['\"]?"
+				if ! [[ $line =~ $regex ]]; then
+					lastMatched="$line"
+					util:print_lint 113 "First line in function must correctly set 'fn' as the name of the function"
+				fi
+				count=$((2))
+			elif ((count == 2)); then
+				local regex="bootstrap.fn \"?\\$\"?"
+				if ! [[ $line =~ $regex ]]; then
+					lastMatched="$line"
+					util:print_lint 114 "Second line in function must call 'bootstrap.fn' properly"
+				fi
+				count=$((0))
+			fi
+		done < "$file"
 	done
 
 	# Ensure no lint codes are skipped or repeated
