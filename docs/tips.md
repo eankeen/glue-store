@@ -1,6 +1,10 @@
 # Tips
 
-Besides the general tips when writing Bash, consider the following when writing scripts
+Consider the following
+
+## Use Linter
+
+`./scripts/lint.sh`
 
 ## Avoid explicit subshells
 

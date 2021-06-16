@@ -20,6 +20,5 @@ action() {
 	fi
 }
 
-
 action "$@"
 unbootstrap

@@ -2,7 +2,11 @@
 eval "$GLUE_BOOTSTRAP"
 bootstrap
 
-# docker
-# node-prune
+task() {
+	:
+	# docker
+	# node-prune
+}
 
+task "$@"
 unbootstrap

@@ -11,7 +11,7 @@ util.get_working_dir() {
 	bootstrap.fn "$fn"
 
 	while [ ! -f "glue.sh" ] && [ "$PWD" != / ]; do
-		cd ..
+		ensure.cd ..
 	done
 
 	if [ "$PWD" = / ]; then

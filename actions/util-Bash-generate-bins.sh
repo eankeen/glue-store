@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/usr/bin/env bash
 eval "$GLUE_BOOTSTRAP"
 bootstrap
 

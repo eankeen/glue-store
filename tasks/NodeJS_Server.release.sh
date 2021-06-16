@@ -2,4 +2,9 @@
 eval "$GLUE_BOOTSTRAP"
 bootstrap
 
+task() {
+	:
+}
+
+task "$@"
 unbootstrap

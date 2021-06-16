@@ -2,10 +2,8 @@
 eval "$GLUE_BOOTSTRAP"
 bootstrap
 
-ensure.cmd 'conventional-changelog'
-
 action() {
-	REPLY=
+	ensure.cmd 'conventional-changelog'
 
 	local version="$1"
 
@@ -22,7 +20,7 @@ action() {
 	ensure.nonZero 'gitRepoName' "$gitRepoName"
 
 	bootstrap.generated 'tool-conventional-changelog'; (
-		cd "$GENERATED_DIR" || error.cd_failed
+		ensure.cd "$GENERATED_DIR"
 
 		cp "$cfgContextJson" .
 		sed -i \

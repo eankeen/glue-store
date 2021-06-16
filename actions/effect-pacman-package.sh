@@ -2,14 +2,14 @@
 eval "$GLUE_BOOTSTRAP"
 bootstrap
 
-# makerepropkg *.zst
-# repro -f *.zst
-
-# pacman -Qlp ./*.zst
-
-# toast --shell
-
 action() {
+	# makerepropkg *.zst
+	# repro -f *.zst
+
+	# pacman -Qlp ./*.zst
+
+	# toast --shell
+
 	ensure.file glue.toml
 	ensure.file glue-auto.toml
 
@@ -40,9 +40,9 @@ action() {
 
 	bootstrap.generated 'effect-pacman-package'
 	(
-		cd "$GENERATED_DIR" || error.cd_failed
+		ensure.cd "$GENERATED_DIR" error.cd_failed
 		mkdir dev
-		cd dev || error.cd_failed
+		ensure.cd dev
 
 		tar --create --directory "$GLUE_WD" --file "$myProject-$myVer.tar.gz" --exclude './.git' \
 				--exclude "$myProject-$myVer.tar.gz" --transform "s/^\./$myProject-$myVer/" ./
@@ -61,7 +61,7 @@ action() {
 		namcap PKGBUILD
 		makepkg -Cfsrc
 		namcap ./*.zst
-	) || exit
+	)
 	unbootstrap.generated
 }
 

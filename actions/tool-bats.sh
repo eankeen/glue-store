@@ -7,7 +7,6 @@ action() {
 	local exitCode=0
 
 	ensure.cmd 'bats'
-
 	(
 		local exitCode=0
 
