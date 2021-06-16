@@ -27,8 +27,6 @@ toml.get_key() {
 			continue
 		fi
 
-		shopt -s extglob
-
 		key="${line%%=*}"
 		key=${key##+( )}
 		key=${key%%+( )}

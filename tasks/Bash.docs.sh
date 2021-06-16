@@ -9,7 +9,7 @@ task() {
 	local exitOne="$REPLY"
 
 	hook.tool-mkdocs.copy_docs() {
-		mkdir -p docs
+		mkdir -p docs/shdoc
 		cp -r "$GLUE_WD/.glue/generated/tool-shdoc" ./docs/shdoc
 	}
 	# glue useAction(tool-mkdocs.sh)
@@ -17,7 +17,6 @@ task() {
 	source "$REPLY"
 	local exitTwo="$REPLY"
 
-	# shellcheck disable=SC2269
 	REPLY="$((exitOne | exitTwo))"
 }
 

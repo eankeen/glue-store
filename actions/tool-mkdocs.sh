@@ -3,7 +3,7 @@ eval "$GLUE_BOOTSTRAP"
 bootstrap
 
 action() {
-	ensure.cmd 'toast'
+	ensure.cmd 'docker'
 
 	util.shopt -s globstar
 
@@ -11,45 +11,79 @@ action() {
 
 	toml.get_key 'gitRemoteUser' glue.toml
 	local gitRemoteUser="$REPLY"
+	ensure.nonZero 'gitRemoteUser' "$gitRemoteUser"
 
 	toml.get_key 'gitRemoteRepo' glue.toml
 	local gitRemoteRepo="$REPLY"
+	ensure.nonZero 'gitRemoteRepo' "$gitRemoteRepo"
 
-	bootstrap.generated 'tool-mkdocs'
-	ensure.cd "$GENERATED_DIR"
+	toml.get_key 'description' glue.toml
+	local description="$REPLY"
+	ensure.nonZero 'description' "$description"
 
-	# TODO: only import docs
-	git clone --depth 1 file://"$GLUE_WD" .
+	toml.get_key 'license' glue.toml
+	local tomlKeyLicense="$REPLY"
+	ensure.nonZero 'tomlKeyLicense' "$tomlKeyLicense"
+
+	# TODO: rename 'name' to 'author'? (or something else?)
+	toml.get_key 'name' glue.toml
+	local tomlKeyName="$REPLY"
+	ensure.nonZero 'tomlKeyName' "$tomlKeyName"
+
+	toml.get_key 'project' glue.toml
+	local tomlKeyProject="$REPLY"
+	ensure.nonZero 'tomlKeyProject' "$tomlKeyProject"
 
 	# glue useConfig(tool-mkdocs)
 	util.get_config 'tool-mkdocs/mkdocs.yml'
 	local cfgMkdocsYml="$REPLY"
 
-	util.get_config 'tool-mkdocs/pyproject.toml'
-	local cfgPyprojectToml="$REPLY"
+	util.get_config 'tool-mkdocs/Dockerfile'
+	local cfgDockerfile="$REPLY"
 
-	util.get_config 'tool-mkdocs/toast.yml'
-	local cfgToastYml="$REPLY"
+	bootstrap.generated 'tool-mkdocs'; {
+		ensure.cd "$GENERATED_DIR"
 
-	cp "$cfgMkdocsYml" "$cfgPyprojectToml" "$cfgToastYml" .
+		cp "$cfgMkdocsYml" "$cfgDockerfile" .
 
-	ensure.file "$GLUE_WD/README.md"
-	cp "$GLUE_WD/README.md" 'docs/index.md'
+		sed -i \
+			-e "s/TEMPLATE_SITE_NAME/$tomlKeyProject/g" \
+			-e "s/TEMPLATE_REMOTE_USER/$gitRemoteUser/g" \
+			-e "s/TEMPLATE_REMOTE_REPO/$gitRemoteRepo/g" \
+			-e "s/TEMPLATE_DESCRIPTION/$description/g" \
+			-e "s/TEMPLATE_AUTHOR/$tomlKeyProject/g" \
+			mkdocs.yml
 
-	# Copy specialized files to 'docs' before build
-	util.run_hook 'hook.tool-mkdocs.copy_docs'
+		sed -i \
+			-e "s/TEMPLATE_POETRY_NAME/$tomlKeyProject/g" \
+			-e "s/TEMPLATE_POETRY_DESCRIPTION/$description/g" \
+			-e "s/TEMPLATE_POETRY_AUTHOR/$tomlKeyName/g" \
+			-e "s/TEMPLATE_POETRY_LICENSE/$tomlKeyLicense/g" \
+			-e "s/TEMPLATE_DOCKER_LICENSE/$tomlKeyLicense/g" \
+			Dockerfile
 
-	toast mkdocs
-	cp -r "$GENERATED_DIR/site" "site"
+		# Copy current documentation
+		mkdir -p docs
+		cp "$GLUE_WD"/docs/* ./docs
+		ensure.file "$GLUE_WD/README.md"
+		cp "$GLUE_WD/README.md" 'docs/index.md'
 
-	ensure.cd site
-	git init --initial-branch=main
-	git add -A
-	# TODO: commit message
-	git commit -m 'Update site'
-	# TODO: rebase or configure merge strategy
-	git push -f "https://github.com/$gitRemoteUser/$gitRemoteRepo.git" main:gh-pages
-	unbootstrap.generated
+		# Copy specialized files to 'docs' before build
+		util.run_hook 'hook.tool-mkdocs.copy_docs'
+
+		ls -al
+		docker build -t 'tool-mkdocs-poetry:default' .
+		docker run -it --name 'tool-mkdocs-poetry-container' 'tool-mkdocs-poetry:default'
+		docker container cp 'tool-mkdocs-poetry-container:/home/op/site' 'site'
+		docker container rm -f 'tool-mkdocs-poetry-container'
+
+		ensure.cd site
+		git init --initial-branch=main
+		git add -A
+		git commit -m 'tool-mkdocs.sh: Update site'
+		# # TODO: rebase or configure merge strategy to preserve history
+		git push -f "https://github.com/$gitRemoteUser/$gitRemoteRepo.git" main:gh-pages
+	}; unbootstrap.generated
 
 	REPLY="$exitCode"
 }

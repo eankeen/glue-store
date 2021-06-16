@@ -19,5 +19,8 @@ cd "$GLOBAL_ORIGINAL_WD"
 ./util/ensure.sh
 if ! cd "$dir"; then
 
+./actions/util-Bash-generate-bins.sh
+esac; done; ${eg:+shopt -u $eg}
+
 
 

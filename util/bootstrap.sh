@@ -4,7 +4,7 @@
 # @noargs
 bootstrap() {
 	set -eEo pipefail
-	shopt -s extglob
+	shopt -s extglob # glue-linter-ignore
 
 	unset REPLY task action
 
@@ -41,12 +41,12 @@ bootstrap() {
 	# source files in 'util'
 	local dir="util"
 
-	if shopt -q nullglob; then
+	if shopt -q nullglob; then # glue-linter-ignore
 		local shoptExitStatus="$?"
 	else
 		local shoptExitStatus="$?"
 	fi
-	shopt -s nullglob
+	shopt -s nullglob # glue-linter-ignore
 
 	local -a filesToSource=()
 
@@ -86,7 +86,7 @@ bootstrap() {
 	done
 
 	if (( shoptExitStatus != 0 )); then
-		shopt -u nullglob
+		shopt -u nullglob # glue-linter-ignore
 	fi
 
 	for file in "${filesToSource[@]}"; do
@@ -167,7 +167,7 @@ unbootstrap() {
 			-u) newOptionValue="-s" ;;
 		esac
 
-		shopt "$newOptionValue" "$optionName"
+		shopt "$newOptionValue" "$optionName" # glue-linter-ignore
 	done
 
 	_util_shopt_data=

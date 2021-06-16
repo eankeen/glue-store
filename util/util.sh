@@ -123,7 +123,7 @@ util.shopt() {
 
 	ensure.args 'util.shopt' '1 2' "$@"
 
-	shopt "$1" "$2"
+	shopt "$1" "$2" # glue-linter-ignore
 	_util_shopt_data+="$1.$2 "
 
 	unbootstrap.fn

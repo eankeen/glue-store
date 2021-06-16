@@ -10,9 +10,25 @@ shopt -s extglob nullglob globstar
 # @exitcode 1 At least one lint error
 # @exitcode 2 Discontinuity within lint code integer sequence
 
+# TODO: ensure variables after util.get_config start with 'cfg'
+# TODO: ensure get_key variables have same name as key or start with 'key' or 'member' or 'property', etc.
+# TODO: ensure bootstrap.generated is always followed by a {, and same with unbootstrap.generated, but with a }
+# TODO: ensure reply with $exitCode or $REPLY, ensure exitCode is initialized
+# TODO: check that files in 'config' are actually called and used
+
 util:is_ignored_line() {
 	local lastMatchedLine="$1"
 	local file="$2"
+
+	# Ignore comments
+	if [[ ${lastMatchedLine::1} == '#' ]]; then
+		return 0
+	fi
+
+	local regex="# glue-linter-ignore"
+	if [[ $lastMatchedLine =~ $regex ]]; then
+		return 0
+	fi
 
 	# shellcheck disable=SC1007
 	local currentIgnoreFile= currentIgnoreLine=
@@ -106,7 +122,10 @@ main() {
 		if lastMatched="$(grep -P "(?<!ensure\.)cd[ \t]+" "$file")"; then
 			util:print_lint 112 "Use 'ensure.cd' instead of 'cd'"
 		fi
-		:
+
+		if lastMatched="$(grep -P "(?<!util\.)shopt[ \t]+" "$file")"; then
+			util:print_lint 116 "Use 'util.shopt' instead of 'shopt'"
+		fi
 	done
 
 	for file in ./{actions,tasks}/?*.sh; do
@@ -132,6 +151,11 @@ main() {
 
 		if lastMatched="$(grep "\(||\|&&\)" "$file")"; then
 			util:print_lint 110 "Do not use '||' or '&&', as they they will not work as intended with 'set -e' enabled"
+		fi
+
+		if [ ! -x "$file" ]; then
+			lastMatched=
+			util:print_lint 115 "File not marked as executable"
 		fi
 	done
 
