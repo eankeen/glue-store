@@ -7,6 +7,10 @@
 # @exitcode 1
 die() {
 	log.error "${*-"log.die: Terminate application"}. Exiting"
+
+	# `set -e` and ensuring ERR trap is called
+	false
+
 	exit 1
 }
 
