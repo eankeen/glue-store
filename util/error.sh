@@ -8,7 +8,7 @@
 die() {
 	log.error "${*-"log.die: Terminate application"}. Exiting"
 
-	# `set -e` and ensuring ERR trap is called
+	# Ensure the ERR trap is called. This works because we are running with `set -e`
 	false
 
 	exit 1

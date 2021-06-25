@@ -235,7 +235,7 @@ unbootstrap.fn() {
 # better 'isolate' any activity or execution. The following variables are set
 #   - `GENERATED_DIR`: Full path to the generated directory
 #   - `GENERATED_DIR_PRETTY`: The basename `GENERATED_DIR`
-# @arrg $1 string Name of directory to generate. It _should_ have the same name of the file containing the callsite to this function
+# @arg $1 string Name of directory to generate. It _should_ have the same name of the file containing the callsite to this function
 bootstrap.generated() {
 	local fn='bootstrap.generated'
 	bootstrap.fn "$fn"

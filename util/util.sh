@@ -260,3 +260,11 @@ util.callstack_print() {
 		done
 	done <<< "$GLOBAL_CALLSTACK"
 }
+
+util.run_exitcode() {
+	if "$@"; then
+		exitCode=$?
+	else
+		exitCode=$?
+	fi
+}
