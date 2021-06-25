@@ -135,7 +135,7 @@ util.prompt_new_version_string() {
 
 	local newVersion=
 	if is.wet_release; then
-		toml.get_key 'version' 'glue-auto.toml'
+		toml.get_key 'programVersion' 'glue-auto.toml'
 		currentVersion="$REPLY"
 
 		# TODO: make incremenet better
@@ -149,7 +149,7 @@ util.prompt_new_version_string() {
 		ensure.git_version_tag_validity "$newVersion"
 	else
 		# When in 'dry' mode, the 'new version' is just the current version
-		toml.get_key 'version' 'glue-auto.toml'
+		toml.get_key 'programVersion' 'glue-auto.toml'
 		newVersion="$REPLY"
 
 		ensure.nonZero 'newVersion' "$newVersion"
@@ -179,10 +179,10 @@ util.update_version_strings() {
 	ensure.file 'glue-auto.toml'
 
 	# Write version
-	if grep -q 'version' glue-auto.toml; then
-		sed -i -e "s|\(version[ \t]*=[ \t]*[\"']\).*\([\"']\)|\1${version}\2|g" glue-auto.toml
+	if grep -q 'programVersion' glue-auto.toml; then
+		sed -i -e "s|\(programVersion[ \t]*=[ \t]*[\"']\).*\([\"']\)|\1${version}\2|g" glue-auto.toml
 	else
-		echo "version = '$version'" >| glue-auto.toml
+		echo "programVersion = '$version'" >| glue-auto.toml
 	fi
 
 	# Write version (project type specific)

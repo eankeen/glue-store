@@ -25,7 +25,7 @@ action() {
 	toml.get_key email glue.toml
 	local myEmail="$REPLY"
 
-	toml.get_key version glue-auto.toml
+	toml.get_key 'programVersion' glue-auto.toml
 	local myVer="$REPLY"; myVer="${myVer/-/_}"
 
 	ensure.nonZero 'myProject' "$myProject"
