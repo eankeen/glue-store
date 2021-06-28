@@ -217,7 +217,7 @@ bootstrap.fn() {
 	local fnName="$1"
 
 	if [ -z "$fnName" ]; then
-		die "bootstrap.fn: Variable '$fnName' must be non zero"
+		die "bootstrap.fn: Variable '$fnName' must be non-zero"
 	fi
 
 	GLOBAL_CALLSTACK="$fnName${GLOBAL_CALLSTACK:+";$GLOBAL_CALLSTACK"}"

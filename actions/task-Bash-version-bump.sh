@@ -14,7 +14,7 @@ action() {
 	exec 8>&-
 
 	wait
-	log.info "util-Bash-version-bump: Bump done"
+	log.info "task-Bash-version-bump: Bump done"
 }
 
 action "$@"

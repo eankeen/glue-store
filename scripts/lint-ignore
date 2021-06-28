@@ -1,16 +1,16 @@
-./actions/util-Bash-generate-bins.sh
+./actions/task-Bash-generate-bins.sh
 ! [[ $1 =~ /+[^/]+/*$|^//$ ]] || REPLY="${1%${BASH_REMATCH[0]}}"
 
-./actions/util-Bash-generate-bins.sh
+./actions/task-Bash-generate-bins.sh
 while [[ -L "$1" ]] && target=$(readlink -- "$1"); do
 
-./actions/util-Bash-generate-bins.sh
+./actions/task-Bash-generate-bins.sh
 [[ $REPLY != . && $target != /* ]] && REPLY=$REPLY/$target || REPLY=$target
 
-./actions/util-Bash-generate-bins.sh
+./actions/task-Bash-generate-bins.sh
 for target; do [[ $REPLY == "$target" ]] && break 2; done
 
-./actions/util-Bash-generate-bins.sh
+./actions/task-Bash-generate-bins.sh
 REPLY=$PWD; local eg=extglob; ! shopt -q $eg || eg=; ${eg:+shopt -s $eg}
 
 ./util/bootstrap.sh
@@ -19,7 +19,7 @@ cd "$GLOBAL_ORIGINAL_WD"
 ./util/ensure.sh
 if ! cd "$dir"; then
 
-./actions/util-Bash-generate-bins.sh
+./actions/task-Bash-generate-bins.sh
 esac; done; ${eg:+shopt -u $eg}
 
 

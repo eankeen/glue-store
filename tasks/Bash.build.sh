@@ -9,14 +9,15 @@ task() {
 	hook.util.update_version_strings.bump_version() {
 		local version="$1"
 
-		# glue useAction(util-Bash-version-bump.sh)
-		util.get_action 'util-Bash-version-bump.sh'
+		# glue useAction(task-Bash-version-bump.sh)
+		util.get_action 'task-Bash-version-bump.sh'
 		source "$REPLY" "$version"
 	}
+
 	util.update_version_strings "$version"
 
-	# glue useAction(util-Bash-generate-bins.sh)
-	util.get_action 'util-Bash-generate-bins.sh'
+	# glue useAction(task-Bash-generate-bins.sh)
+	util.get_action 'task-Bash-generate-bins.sh'
 	source "$REPLY"
 
 	# With 'set -e' enabled, the previous commands

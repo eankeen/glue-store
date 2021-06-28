@@ -3,7 +3,7 @@ eval "$GLUE_BOOTSTRAP"
 bootstrap
 
 action() {
-	git-secrets --install --force
+	echo "Action 'task-Test-noop.sh' executed"
 }
 
 action "$@"

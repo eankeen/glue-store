@@ -186,7 +186,7 @@ util.update_version_strings() {
 	fi
 
 	# Write version (project type specific)
-	util.run_hook 'hook.util.update_version_strings.bump_version'
+	util.run_hook 'hook.util.update_version_strings.bump_version' "$version"
 
 	unbootstrap.fn
 }
@@ -235,8 +235,10 @@ util.run_hook() {
 
 	ensure.nonZero 'hookName' "$hookName"
 
+	shift
+
 	if command -v "$hookName"; then
-			if ! "$hookName"; then
+			if ! "$hookName" "$@"; then
 				die "Hook '$hookName' did not complete successfully"
 			fi
 		fi

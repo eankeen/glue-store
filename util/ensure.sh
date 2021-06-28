@@ -64,7 +64,7 @@ ensure.nonZero() {
 	fi
 
 	if [ -z "$varValue" ]; then
-		die "ensure.nonZero: Variable '$varName' must be non zero"
+		die "ensure.nonZero: Variable '$varName' must be non-zero"
 	fi
 
 	unbootstrap.fn
